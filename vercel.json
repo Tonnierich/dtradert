@@ -2,15 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "packages/trader/next.config.js",
-      "use": "@vercel/next"
+      "src": "packages/trader/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "packages/trader/$1" }
-  ],
   "env": {
-    "DERIV_APP_ID": "99301",
-    "NODE_ENV": "production"
-  }
+    "NODE_ENV": "production",
+    "CI": "true"
+  },
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run build:trader"
 }
