@@ -9,8 +9,8 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "installCommand": "npm ci",
-  "buildCommand": "npm run vercel-build",
+  "installCommand": "cd packages/trader && npm install --legacy-peer-deps",
+  "buildCommand": "cd packages/trader && npm run build",
   "outputDirectory": "packages/trader/dist",
   "framework": null
 }
