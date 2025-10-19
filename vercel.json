@@ -1,16 +1,9 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "packages/trader/package.json",
-      "use": "@vercel/static-build"
-    }
+    { "src": "package.json", "use": "@vercel/static-build" }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "installCommand": "cd packages/trader && npm install --legacy-peer-deps",
-  "buildCommand": "cd packages/trader && npm run build",
-  "outputDirectory": "packages/trader/dist",
+  "buildCommand": "npm install && npx webpack --config build/webpack.config.js --env production",
+  "outputDirectory": "dist",
   "framework": null
 }
