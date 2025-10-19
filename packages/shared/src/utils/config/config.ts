@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 /*
  * Configuration values needed in js codes
  *
