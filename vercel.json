@@ -3,17 +3,14 @@
   "builds": [
     {
       "src": "packages/trader/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "use": "@vercel/static-build"
     }
   ],
   "env": {
-    "NODE_ENV": "production",
-    "CI": "true"
+    "NODE_ENV": "production"
   },
-  "framework": null,
-  "installCommand": "npm install",
-  "buildCommand": "npm run build:trader"
+  "buildCommand": "cd packages/trader && npm install && npx webpack --config build/webpack.config.js --env production",
+  "installCommand": "npm install --workspace packages/trader",
+  "outputDirectory": "packages/trader/dist",
+  "framework": null
 }
