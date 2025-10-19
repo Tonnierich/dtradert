@@ -9,8 +9,8 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "buildCommand": "cd packages/trader && npm install && npx webpack --config build/webpack.config.js --env production",
-  "installCommand": "npm install --workspace packages/trader",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "packages/trader/dist",
   "framework": null
 }
