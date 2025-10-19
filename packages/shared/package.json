@@ -60,3 +60,8 @@
         "ua-parser-js": "^1.0.37"
     }
 }
+"devDependencies": {
+  "webpack": "^5.97.1",
+  "webpack-cli": "^5.1.4",
+  ...
+}
