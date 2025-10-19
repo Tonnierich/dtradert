@@ -1,18 +1,11 @@
-import { getAppId } from '../config/config';
-
 export const redirectToLogin = () => {
-    // 🔹 Auto-connect using your App ID for demo/virtual account
-    const app_id = getAppId();
-    const redirect_url = `https://oauth.deriv.com/oauth2/authorize?app_id=${app_id}&l=EN`;
+    const app_id = process.env.NEXT_PUBLIC_APP_ID || '99301';
+    const redirect_uri = process.env.NEXT_PUBLIC_REDIRECT_URL || window.location.origin;
+    const login_url = `https://oauth.deriv.com/oauth2/authorize?app_id=${app_id}&l=EN&redirect_uri=${encodeURIComponent(redirect_uri)}`;
 
-    // You could optionally include your redirect back to your app:
-    const current_host = window.location.origin;
-    const final_url = `${redirect_url}&redirect_uri=${encodeURIComponent(current_host)}`;
-
-    window.location.href = final_url;
+    window.location.href = login_url;
 };
 
 export const redirectToSignUp = () => {
-    // Direct to Deriv signup page
     window.location.href = 'https://deriv.com/signup/';
 };
