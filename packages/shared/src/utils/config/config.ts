@@ -9,71 +9,21 @@
 
 import { getProductionPlatformHostname, getStagingPlatformHostname } from '../brand';
 
+// Detect environment
 export const isProduction = () => {
-    const productionHostname = getProductionPlatformHostname();
-    const stagingHostname = getStagingPlatformHostname();
-
-    // Create regex patterns for both production and staging domains (with optional www prefix)
-    const productionPattern = `(www\\.)?${productionHostname.replace('.', '\\.')}`;
-    const stagingPattern = `(www\\.)?${stagingHostname.replace('.', '\\.')}`;
-
-    // Check if current hostname matches any of the supported domains
-    const supportedDomainsRegex = new RegExp(`^(${productionPattern}|${stagingPattern})$`, 'i');
-
-    // Return true only if we're on the production hostname
-    const productionRegex = new RegExp(`^${productionPattern}$`, 'i');
-    return supportedDomainsRegex.test(window.location.hostname) && productionRegex.test(window.location.hostname);
+    const hostname = window?.location?.hostname ?? '';
+    return hostname === getProductionPlatformHostname() || process.env.NODE_ENV === 'production';
 };
 
-/**
- * Gets account_type with priority: URL parameter > localStorage > default 'demo'
- * @returns {string} 'real', 'demo', or 'demo' as default
- */
-export const getAccountType = (): string => {
-    const search = window.location.search;
-    const search_params = new URLSearchParams(search);
-    const accountTypeFromUrl = search_params.get('account_type');
-
-    // First priority: URL parameter
-    if (accountTypeFromUrl === 'real' || accountTypeFromUrl === 'demo') {
-        window.localStorage.setItem('account_type', accountTypeFromUrl);
-
-        // Remove account_type from URL after processing
-        const url = new URL(window.location.href);
-        if (url.searchParams.has('account_type')) {
-            url.searchParams.delete('account_type');
-            window.history.replaceState({}, document.title, url.toString());
-        }
-
-        return accountTypeFromUrl;
-    }
-
-    // Second priority: localStorage
-    const storedAccountType = window.localStorage.getItem('account_type');
-    if (storedAccountType === 'real' || storedAccountType === 'demo') {
-        return storedAccountType;
-    }
-
-    // Default to demo when no account_type parameter or invalid value
-    return 'demo';
+// ✅ Use the App ID from Vercel env or fallback to 99301
+export const getAppId = (): number => {
+    const app_id = Number(process.env.DERIV_APP_ID || 99301);
+    return app_id;
 };
 
-export const getSocketURL = () => {
-    const local_storage_server_url = window.localStorage.getItem('config.server_url');
-    if (local_storage_server_url) return local_storage_server_url;
-
-    // Get account type
-    const accountType = getAccountType();
-
-    // Map account type to new v2 endpoints
-    const server_url = accountType === 'real' ? 'realv2.derivws.com' : 'demov2.derivws.com';
-
-    return server_url;
+export const getSocketUrl = () => {
+    if (isProduction()) return 'wss://ws.derivws.com/websockets/v3';
+    return 'wss://staging-ws.derivws.com/websockets/v3';
 };
 
-export const getDebugServiceWorker = () => {
-    const debug_service_worker_flag = window.localStorage.getItem('debug_service_worker');
-    if (debug_service_worker_flag) return !!parseInt(debug_service_worker_flag);
-
-    return false;
-};
+export const getDerivComUrl = () => (isProduction() ? 'https://deriv.com' : 'https://staging.deriv.com');
