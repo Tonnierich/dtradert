@@ -1,13 +1,18 @@
-import { getBrandLoginUrl, getBrandSignupUrl, getPlatformHostname } from '../brand';
+import { getAppId } from '../config/config';
 
 export const redirectToLogin = () => {
-    const baseLoginUrl = getBrandLoginUrl();
-    const platformHostname = getPlatformHostname();
-    const loginUrlWithRedirect = `${baseLoginUrl}?redirect=${encodeURIComponent(platformHostname)}`;
+    // 🔹 Auto-connect using your App ID for demo/virtual account
+    const app_id = getAppId();
+    const redirect_url = `https://oauth.deriv.com/oauth2/authorize?app_id=${app_id}&l=EN`;
 
-    window.location.href = loginUrlWithRedirect;
+    // You could optionally include your redirect back to your app:
+    const current_host = window.location.origin;
+    const final_url = `${redirect_url}&redirect_uri=${encodeURIComponent(current_host)}`;
+
+    window.location.href = final_url;
 };
 
 export const redirectToSignUp = () => {
-    window.location.href = getBrandSignupUrl();
+    // Direct to Deriv signup page
+    window.location.href = 'https://deriv.com/signup/';
 };
